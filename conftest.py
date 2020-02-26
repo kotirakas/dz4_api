@@ -1,12 +1,23 @@
 import pytest
 
-@pytest.fixture(
-    params=["https://dog.ceo/api/breed/akita/images/random", "https://dog.ceo/api/breed/hound/images/random", "https://dog.ceo/api/breed/boxer/images/random"])
-def pict(request):
-    return request.param
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--url",
+        action="store",
+        default="https://ya.ru",
+        help="This is request url",
+
+    )
+    parser.addoption("--status_code", action="store", default=200, help="This is status code")
 
 
-@pytest.fixture(
-    params=["https://dog.ceo/api/breed/hound/list", "https://dog.ceo/api/breed/briard/list", "https://dog.ceo/api/breed/mastiff/list"])
-def per(request):
-    return request.param
+@pytest.fixture
+def paramses(request):
+    return request.config.getoption("--url")
+
+
+
+@pytest.fixture
+def status(request):
+    return int(request.config.getoption("--status_code"))
